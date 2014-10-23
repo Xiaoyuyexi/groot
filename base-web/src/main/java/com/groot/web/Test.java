@@ -5,5 +5,6 @@ public class Test {
 	public static void main(String[] args){
 		System.out.println("branch just pull request");
 		System.out.println("why?");
+		System.out.println("merge2");
 	}
 }
