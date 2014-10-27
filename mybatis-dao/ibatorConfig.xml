@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ibatorConfiguration PUBLIC "-//Apache Software Foundation//DTD Apache iBATIS Ibator Configuration 1.0//EN" "http://ibatis.apache.org/dtd/ibator-config_1_0.dtd" >
+<ibatorConfiguration>
+	<classPathEntry
+		location="E:\mysql-connector-java-5.1.22-bin.jar" />
+
+	<ibatorContext id="Project">
+
+		<ibatorPlugin type="org.apache.ibatis.ibator.plugins.SerializablePlugin"></ibatorPlugin>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://196.168.0.141:3306:groot"
+			userId="hkrt" password="hkrt" ></jdbcConnection>
+	<javaModelGenerator targetPackage="com.groot.module.domain" targetProject="mybatis-dao" />
+    <sqlMapGenerator targetPackage="com.groot.module.map" targetProject="mybatis-dao" />
+    <daoGenerator targetPackage="com.groot.module.dao" targetProject="mybatis-dao" type="SPRING" />
+    
+    <table  tableName="HKRT_SYSTEM_USER"  modelType="flat"></table>
+    <table  tableName="HKRT_SYSTEM_PERMISSION"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_ROLE"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_ROLE_PERMISSION"  modelType="flat"> </table>
+    <!-- <table  tableName="HKRT_AMS_TERMINAL"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_AGENT"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_LOOKUP_TYPE"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_LOOKUP_CDE"  modelType="flat"> </table>
+    <table  tableName="HKRT_UNIONPAY_AREA_CDE"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_CHINA_AREA"  modelType="flat"> </table>
+    <table  tableName="HKRT_ADMINISTRATIVE_DIVISION"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_CARD_BIN"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_MCC"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_TRADE_TYPE"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_MERCHANT"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_AGENT_SALESMAN"  modelType="flat"> </table>
+    <table  tableName="HKRT_SERVICE_SCOPE_TYPE"  modelType="flat"> </table>
+    <table  tableName="HKRT_SERVICE_SCOPE_ITEM"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_AGENT_AUTHORIZE"  modelType="flat"> </table>
+    <table  tableName="HKRT_IMAGE_CATEGORY"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_DEPARTMENT"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_BUSHEET"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_BUSHEET_WORKFLOW"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_ISS_BANK"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_BANK_OUTLETS"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_MERCHANT_TERMINAL"  modelType="flat"> </table>
+    <table  tableName="HKRT_MERCHANT_IMAGE"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_MERCHANT_EXAMINE_LOG"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_ERROR"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_CARD_TYPE"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_FEE_RULE"  modelType="flat"> </table>
+    <table  tableName="HKRT_IMAGE"  modelType="flat"> </table>
+    <table  tableName="HKRT_MERCHANT_SELECT_LOG"  modelType="flat"> </table>
+    <table  tableName="HKRT_MERCHANT_LIMIT_RULE"  modelType="flat"> </table>
+    <table  tableName="HKRT_MERCHANT_LIMIT_AMOUNT"  modelType="flat"> </table>
+    <table  tableName="HKRT_MERCHANT_ORDER"  modelType="flat"> </table>
+    <table  tableName="HKRT_AMS_SALESTAFF"  modelType="flat"> </table> 
+    <table  tableName="HKRT_PROVINCE_MERCHANT_NO"  modelType="flat"> </table> 
+    <table  tableName="HKRT_POS_ORDER_PAYMENT"  modelType="flat"> </table> 
+    <table  tableName="HKRT_HOLIDAY"  modelType="flat"> </table>
+    <table  tableName="HKRT_BANK_CHANNEL"  modelType="flat"> </table>
+    <table  tableName="HKRT_MERCHANT_ROUTE"  modelType="flat"> </table>
+    <table  tableName="HKRT_DEFAULT_ROUTE"  modelType="flat"> </table>
+    <table  tableName="HKRT_BANK_ROUTE"  modelType="flat"> </table>
+    <table  tableName="HKRT_MERCHANT_EXCHANGE"  modelType="flat"> </table> 
+    <table  tableName="HKRT_TRANSACTION_ROUTE"  modelType="flat"> </table>   
+    <table  tableName="HKRT_FINANCE_ORDER"  modelType="flat"> </table>   
+    <table  tableName="HKRT_ROUTE_RULE"  modelType="flat"> </table>
+    <table  tableName="HKRT_BANK_ROUTE_BANK"  modelType="flat"> </table>
+    <table  tableName="HKRT_TRANSACTION_ROUTE_BANK"  modelType="flat"> </table>
+     <table  tableName="HKRT_SYSTEM_MENU"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_INTERFACE_CHANNEL"  modelType="flat"> </table>
+    <table  tableName="HKRT_BANK_CHANNEL_DETAIL"  modelType="flat"> </table>
+    <table  tableName="HKRT_IMAGE_HISTORY"  modelType="flat"> </table>
+    <table  tableName="HKRT_MCC_MERCHANT"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_MONITOR"  modelType="flat"> </table>
+    <table  tableName="HKRT_DATA_HISTORY"  modelType="flat"> </table>
+    <table  tableName="HKRT_MERCHANT_SETTLE"  modelType="flat"> </table>
+    <table  tableName="HKRT_POS_SETTLE_LIST"  modelType="flat"> </table>
+    <table  tableName="HKRT_SETTLE_CONFIG"  modelType="flat"> </table>
+    <table  tableName="HKRT_STORE_FORWARD_PAYMENT"  modelType="flat"> </table>
+    <table  tableName="HKRT_SYSTEM_CONFIG"  modelType="flat"> </table>
+    <table  tableName="HKRT_ROUTE_CONVERSION_BANK"  modelType="flat"> </table>
+    <table  tableName="HKRT_ROUTE_CONVERSION"  modelType="flat"> </table>
+    <table  tableName="HKRT_DEFAULT_LIMIT_RULE"  modelType="flat"> </table>
+    <table  tableName="HKRT_BUSHEET_PERMISSION"  modelType="flat"> </table>
+    <table  tableName="HKRT_PAY_ORDER"  modelType="flat"> </table>
+    <table  tableName="HKRT_RISK_CONTROL"  modelType="flat"> </table>
+    <table  tableName="HKRT_RISK_CASE"  modelType="flat"> </table>
+    <table  tableName="HKRT_RISK_CASE_DETAIL"  modelType="flat"> </table>
+    <table  tableName="HKRT_RISK_RULE_CONFIG"  modelType="flat"> </table>
+    <table  tableName="HKRT_RISK_CATEGORY"  modelType="flat"> </table>
+    <table  tableName="HKRT_SALESMAN_CHECKINS"  modelType="flat"> </table> -->
+
+	</ibatorContext>
+
+</ibatorConfiguration>

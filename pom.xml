@@ -15,5 +15,8 @@
   </properties>
   <modules>
     <module>base-web</module>
+    <module>core</module>
+    <module>dev</module>
+    <module>mybatis-dao</module>
   </modules>
 </project>

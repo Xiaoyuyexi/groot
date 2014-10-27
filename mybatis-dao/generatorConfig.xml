@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="D:\mysql-connector-java-5.1.22-bin.jar" />
+  <context id="groot" >
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" 
+			connectionURL="jdbc:mysql://192.168.0.141:3306/groot"
+			userId="hkrt" password="hkrt" ></jdbcConnection>
+	<javaModelGenerator targetPackage="com.groot.module.domain" targetProject="mybatis-dao" />
+    <sqlMapGenerator targetPackage="com.groot.module.map" targetProject="mybatis-dao" />
+    <javaClientGenerator targetPackage="com.groot.module.dao" targetProject="mybatis-dao" type="SPRING" />
+    
+    <table  tableName="GROOT_SYSTEM_USER"  modelType="flat"></table>
+    <table  tableName="GROOT_SYSTEM_PERMISSION"  modelType="flat"> </table>
+    <table  tableName="GROOT_SYSTEM_ROLE"  modelType="flat"> </table>
+    <table  tableName="GROOT_SYSTEM_ROLE_PERMISSION"  modelType="flat"> </table>
+  </context>
+</generatorConfiguration>
