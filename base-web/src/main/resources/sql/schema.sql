@@ -1,4 +1,4 @@
-CREATE TABLE `HATCHET_SYSTEM_USER` (
+CREATE TABLE `GROOT_SYSTEM_USER` (
   `ID` varchar(32) collate utf8_unicode_ci NOT NULL,
   `LOGIN_NAME` varchar(64) collate utf8_unicode_ci default NULL,
   `PASSWORD` varchar(128) collate utf8_unicode_ci default NULL,
@@ -17,7 +17,7 @@ CREATE TABLE `HATCHET_SYSTEM_USER` (
   PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `HATCHET_SYSTEM_ROLE` (
+CREATE TABLE `GROOT_SYSTEM_ROLE` (
   `ID` varchar(32) collate utf8_unicode_ci NOT NULL,
   `NAME` varchar(32) collate utf8_unicode_ci default NULL,
   `STATUS` varchar(3) collate utf8_unicode_ci default NULL,
@@ -28,7 +28,7 @@ CREATE TABLE `HATCHET_SYSTEM_ROLE` (
   PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `HATCHET_SYSTEM_PERMISSION` (
+CREATE TABLE `GROOT_SYSTEM_PERMISSION` (
   `ID` varchar(32) collate utf8_unicode_ci NOT NULL,
   `PERMISSION_NAME` varchar(128) collate utf8_unicode_ci default NULL,
   `PERMISSION_KEY` varchar(256) collate utf8_unicode_ci default NULL,
@@ -45,7 +45,7 @@ CREATE TABLE `HATCHET_SYSTEM_PERMISSION` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-CREATE TABLE `HATCHET_SYSTEM_ROLE_PERMISSION` (
+CREATE TABLE `GROOT_SYSTEM_ROLE_PERMISSION` (
   `ID` varchar(32) collate utf8_unicode_ci NOT NULL,
   `ROLE_ID` varchar(32) collate utf8_unicode_ci default NULL,
   `PERMISSION_ID` varchar(32) collate utf8_unicode_ci default NULL,
