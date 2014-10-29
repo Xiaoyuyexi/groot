@@ -1,0 +1,29 @@
+.pagination-background{
+	font-family: verdana;
+	font-size:12px;
+	background-image: url('../images/bgpage.jpg');
+	background-repeat: repeat-x;
+	border: 1px solid #8BAABF;
+	border-top: none;
+	height: 25px;
+	line-height: 25px;
+}
+.pagination-background a{
+	text-decoration:none;
+}
+
+.box {
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    width:400px;
+    cursor:pointer;
+}
+/* 
+.box:hover {
+    white-space:normal;
+    color:rgba(0, 0, 0, 1);
+    background:#e3e3e3;
+    border:1px solid #666;
+} */

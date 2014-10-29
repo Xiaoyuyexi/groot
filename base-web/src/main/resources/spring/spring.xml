@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+    xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd" > 
+   	
+    <bean id="selectDAO" class="com.groot.busidao.SelectDaoMySqlImpl" scope="singleton" ><!-- 根据数据库不同，选择对应的DAO实现 -->
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+    
+    <bean id="updateDAO" class="com.groot.busidao.UpdateDAOImpl" scope="singleton" >
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="batchInsertDAO" class="com.groot.busidao.BatchInsertDAOImpl" scope="singleton" >
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+    <bean id="batchUpdateDAO" class="com.groot.busidao.BatchUpdateDAOImpl" scope="singleton" >
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+    <bean id="batchDeleteDAO" class="com.groot.busidao.BatchDeleteDAOImpl" scope="singleton" >
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+    
+    
+    
+    
+   	<bean id="busheetPermissionDAO" class="com.groot.module.dao.GrootBusheetPermissionDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="busheetDAO" class="com.groot.module.dao.GrootBusheetDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="busheetWorkflowDAO" class="com.groot.module.dao.GrootBusheetWorkflowDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="systemConfigDAO" class="com.groot.module.dao.GrootSystemConfigDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="systemDepartmentDAO" class="com.groot.module.dao.GrootSystemDepartmentDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="systemLookupCdeDAO" class="com.groot.module.dao.GrootSystemLookupCdeDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="systemLookupTypeDAO" class="com.groot.module.dao.GrootSystemLookupTypeDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="systemMenuDAO" class="com.groot.module.dao.GrootSystemMenuDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="systemPermissionDAO" class="com.groot.module.dao.GrootSystemPermissionDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="systemRoleDAO" class="com.groot.module.dao.GrootSystemRoleDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="systemRolePermissionDAO" class="com.groot.module.dao.GrootSystemRolePermissionDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean>
+   	<bean id="systemUserDAO" class="com.groot.module.dao.GrootSystemUserDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean> 
+   	<bean id="systemMonitorDAO" class="com.groot.module.dao.GrootSystemMonitorDAOImpl" scope="singleton">
+    	<property name="sqlMapClient" ref="sqlMapClient"></property>
+    </bean> 
+    
+    
+    <!-- Validation -->
+    <bean id="lookUpCdeValidation" class="com.groot.validation.LookUpCdeValidation" scope="singleton" />
+    <bean id="lookUpTypeValidation" class="com.groot.validation.LookUpTypeValidation" scope="singleton" />
+    <bean id="userValidation" class="com.groot.validation.UserValidation" scope="singleton" />
+    <bean id="configValidation" class="com.groot.validation.ConfigValidation" scope="singleton" />
+    <bean id="departmentValidation" class="com.groot.validation.DepartmentValidation" scope="singleton" />
+    <bean id="loginValidation" class="com.groot.validation.LoginValidation" scope="singleton" />
+</beans>

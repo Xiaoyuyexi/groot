@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"  
+       xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       	   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       	   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+       	   http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		   http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
+	
+	<!-- 验证码 -->
+ 	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">  
+        <property name="config">  
+            <bean class="com.google.code.kaptcha.util.Config">  
+                <constructor-arg>  
+                    <props>  
+                        <prop key="kaptcha.border">yes</prop>  
+                        <prop key="kaptcha.border.color">105,179,90</prop>  
+                        <prop key="kaptcha.textproducer.font.color">blue</prop>  
+                        <prop key="kaptcha.image.width">125</prop>  
+                        <prop key="kaptcha.image.height">45</prop>  
+                        <prop key="kaptcha.textproducer.font.size">45</prop>  
+                        <prop key="kaptcha.session.key">code</prop>  
+                        <prop key="kaptcha.textproducer.char.length">4</prop>  
+                        <prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>  
+                    </props>  
+                </constructor-arg>  
+            </bean>  
+        </property>  
+    </bean>
+
+	<!-- 通过exclude-filter 把所有 @Controller注解的表现层控制器组件排除 -->
+	<context:component-scan base-package="com.groot">  
+    	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>  
+	</context:component-scan>
+	
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+		<property name="rollbackOnCommitFailure" value="true" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	<!-- tx:advice id="txAdvice" transaction-manager="transactionManager"> 
+        <tx:attributes> 
+            <tx:method name="ins*"  rollback-for="Exception" propagation = "REQUIRED"/>
+            <tx:method name="sav*"  rollback-for="Exception" propagation = "REQUIRED"/> 
+            <tx:method name="add*"  rollback-for="Exception" propagation = "REQUIRED"/> 
+            <tx:method name="upd*"  rollback-for="Exception" propagation = "REQUIRED"/> 
+            <tx:method name="del*"  rollback-for="Exception" propagation = "REQUIRED"/> 
+            <tx:method name="rem*"  rollback-for="Exception" propagation = "REQUIRED"/> 
+            <tx:method name="do*"   rollback-for="Exception" propagation = "REQUIRED"/> 
+            <tx:method name="*" 	read-only="true" rollback-for="Exception" /> 
+        </tx:attributes> 
+    </tx:advice> 
+	 -->	
+    <bean id="sqlMapClient"  class="org.springframework.orm.ibatis.SqlMapClientFactoryBean" >
+        <property name="dataSource" ref="dataSource"></property> 
+        	<property name="configLocations" value="classpath:ibatis/sqlMapConfig.xml" >
+        </property>
+    </bean>
+    
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="100000" />
+	</bean>
+	<import resource="spring/spring.xml"/>
+	<!-- <import resource="spring/quartz.xml"/> -->
+	<import resource="trace-context.xml"/>
+	<!-- <import resource="remote.xml"/> -->
+
+
+
+<!-- 配置常规数据源，平时开发建议使用此配置。 local development环境-->
+   <beans profile="development">
+   <context:property-placeholder ignore-resource-not-found="true"
+			location="classpath*:/application.properties,
+			classpath*:/classpath:redis.properties" />	
+	 <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	
+		<property name="driverClass" value="${datasource.driverClassName}" />
+		<property name="jdbcUrl" value="${datasource.url}" />
+		<property name="user" value="${datasource.username}" />
+		<property name="password" value="${datasource.password}" />
+		
+		<property name="initialPoolSize" value="${datasource.initialPoolSize}" />
+		<property name="maxPoolSize" value="${datasource.maxPoolSize}" />
+		<property name="minPoolSize" value="${datasource.minPoolSize}"></property>
+		<property name="maxIdleTime" value="${datasource.maxIdleTime}" />
+	</bean>
+	</beans>
+	
+	<!-- 配置常规数据源，平时测试建议使用此配置。 local test环境-->
+   <beans profile="test">
+   <context:property-placeholder ignore-resource-not-found="true"
+			location="classpath*:/test/application.properties,
+			          classpath*:/classpath:redis.properties" />	
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${datasource.driverClassName}" />
+		<property name="jdbcUrl" value="${datasource.url}" />
+		<property name="user" value="${datasource.username}" />
+		<property name="password" value="${datasource.password}" />
+		<property name="initialPoolSize" value="${datasource.initialPoolSize}" />
+		<property name="maxPoolSize" value="${datasource.maxPoolSize}" />
+		<property name="minPoolSize" value="${datasource.minPoolSize}"></property>
+		<property name="maxIdleTime" value="${datasource.maxIdleTime}" />
+	</bean>
+	
+	</beans>
+</beans>

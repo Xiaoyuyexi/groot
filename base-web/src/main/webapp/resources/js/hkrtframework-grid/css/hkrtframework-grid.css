@@ -1,0 +1,40 @@
+.hkrt-top-button{
+    margin-top: 1px;
+    background-color: #1664B4;
+    border: 1px solid #DFECF8;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 13px;
+    line-height: 18px;
+    padding: 1px 10px;
+    text-align: center;
+    font-family: 'Microsoft Yahei',verdana;
+}
+.hkrt-top-button:hover{
+	background-color: #82CFF1;
+}
+.hkrtframework-grid{
+	font-family: verdana;
+	font-size: 12px;
+}
+.hkrtframework-grid table{
+	border: 1px solid #8BAABF;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.hkrtframework-grid table td {
+    border: 1px solid #8BAABF;
+    height: 30px;
+}
+.hkrtframework-grid table td a{
+	text-decoration:none;
+}
+.hkrtframework-grid-tr{
+	background: #FAFAFA;
+}
+.text-left{
+	text-align: left;
+}

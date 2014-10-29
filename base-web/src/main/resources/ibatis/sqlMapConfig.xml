@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="GBK" ?>
+
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" errorTracingEnabled="true" maxRequests="5120"
+		maxSessions="300" maxTransactions="256" useStatementNamespaces="true"/>
+		
+  <sqlMap resource="ibatis/sqlmap-mysql-sql.xml"/><!-- 根据数据库不同，选择对应的XML -->
+  
+  
+  <sqlMap resource="com/groot/model/SYSTEM.xml"/>
+  
+  <sqlMap resource="com/groot/module/map/GROOT_BUSHEET_PERMISSION_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_BUSHEET_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_BUSHEET_WORKFLOW_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_SYSTEM_CONFIG_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_SYSTEM_DEPARTMENT_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_SYSTEM_LOOKUP_CDE_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_SYSTEM_LOOKUP_TYPE_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_SYSTEM_MENU_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_SYSTEM_PERMISSION_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_SYSTEM_ROLE_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_SYSTEM_ROLE_PERMISSION_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_SYSTEM_USER_SqlMap.xml"/>
+  <sqlMap resource="com/groot/module/map/GROOT_SYSTEM_MONITOR_SqlMap.xml"/>
+  
+          
+</sqlMapConfig>

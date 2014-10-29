@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="SYSTEM">
+
+	
+	<!-- selectBySql -->
+    <select id="selectBySqlPage" resultClass="java.util.HashMap" remapResults="true" parameterClass="java.util.HashMap">
+        <include refid="SQLMAP-COMMON-SQL.page_begin" />
+        <isNotEmpty property="sql">$sql$</isNotEmpty>
+        <include refid="SQLMAP-COMMON-SQL.page_end" />
+    </select>
+    <select id="selectBySql" resultClass="java.util.HashMap" remapResults="true" parameterClass="java.util.HashMap">
+        <isNotEmpty property="sql">$sql$</isNotEmpty>
+    </select>
+    <select id="selectBySqlCount" resultClass="java.lang.Integer" parameterClass="java.util.HashMap">
+        <isNotEmpty property="sql">$sql$</isNotEmpty>
+    </select>
+    <!--  updateBySql-->  
+    <update id="updateBySql" parameterClass="java.util.HashMap"> 
+        <isNotEmpty property="sql">$sql$</isNotEmpty> 
+    </update>
+    
+    
+   <select id="getMaxLookUpCdeIntegerKeyBytypeId" resultClass="java.lang.Integer" parameterClass="java.lang.String">
+       select max(c.integer_key) from GROOT_SYSTEM_LOOKUP_CDE c  where c.type_id = #typeId#
+   </select> 
+   
+   
+   <select id="getMaxLookUpCdeCodeBytypeId" resultClass="java.lang.String" parameterClass="java.lang.String">
+       select max(c.cde_code) from GROOT_SYSTEM_LOOKUP_CDE c  where c.type_id = #typeId#
+   </select>
+   
+    
+   <!-- 根据登录用户获取所拥有的一级菜单 -->
+   <select id="getMenuContentByUserId" resultClass="com.groot.module.domain.GrootSystemMenu" parameterClass="string">
+		select m.id,
+				m.menu_code as menuCode,
+				m.menu_name as menuName,
+				m.permission_key as permissionKey ,
+				m.parent_id as parentId ,
+				m.menu_action as menuAction  
+		from  GROOT_SYSTEM_MENU m 
+		where m.id in (
+				select  t.parent_id  
+				from  GROOT_SYSTEM_MENU t 
+				where t.status='10A'
+				and t.permission_key in (
+					select rp.permission_id  
+					from GROOT_SYSTEM_ROLE_PERMISSION rp 
+					left join  GROOT_SYSTEM_ROLE r on rp.role_id=r.id
+					left join  GROOT_SYSTEM_USER u on u.role_id=r.id 
+				  	where u.id =#id#  
+				)) 
+		and m.parent_id is not null 
+		and m.menu_code like '____000000000000' 
+		order by m.menu_code asc 
+   </select>
+   <!-- 根据登录用户获取所拥有的二级菜单 -->
+   <select id="getMenuItemContentByUserId" resultClass="com.groot.module.domain.GrootSystemMenu" parameterClass="string">
+		select t.id,
+		t.menu_code as menuCode,
+		t.menu_name as menuName,
+		t.permission_key as permissionKey, 
+		t.parent_id as parentId,
+		t.menu_action as menuAction 
+		from GROOT_SYSTEM_MENU t 
+		where t.status='10A' 
+		and t.permission_key in (
+				select rp.permission_id  
+				from GROOT_SYSTEM_ROLE_PERMISSION rp 
+				left join  GROOT_SYSTEM_ROLE r on rp.role_id=r.id
+				left join  GROOT_SYSTEM_USER u on u.role_id=r.id 
+				where u.id=#id#   
+				and t.menu_code like '______0000000000'
+				)
+		order by t.menu_code asc 
+   </select>
+   <select id="getPermissionListByRole" resultClass="java.lang.Integer" parameterClass="map">
+   		select count(*) 
+   		from GROOT_SYSTEM_ROLE_PERMISSION rp 
+   		left join GROOT_SYSTEM_ROLE r on rp.role_id = r.id
+   		where r.name = #ruleId#
+   </select>
+   <select id="getRolePermission" resultClass="com.groot.vo.RolePermissionVO" parameterClass="map">
+   		select  rp.id as rolePermissionId,
+		   		rp.role_id as roleId,
+		   		p.id as permissionId,
+		   		p.permission_name as permissionName,
+		   		p.parent_id as parentId,
+		   		p.permission_key as permissionKey 
+   		from GROOT_SYSTEM_ROLE_PERMISSION rp 
+		left join GROOT_SYSTEM_PERMISSION p on rp.permission_id=p.id
+		where rp.role_id = #roleId#
+   </select> 
+   <select id="getPermissionListNoSited" resultClass="com.groot.vo.RolePermissionVO" parameterClass="map">
+   		select  p.id as permissionId,
+		   		p.permission_name as permissionName,
+		   		p.permission_key as permissionKey   
+   		from GROOT_SYSTEM_PERMISSION p 
+   		where p.id not in ( select rp.permission_id 
+					   		from GROOT_SYSTEM_ROLE_PERMISSION rp  
+					   		where rp.role_id=#roleId#) 
+		and p.permission_key is not null 
+   </select>
+   	
+    <select id="selectRoleNameByPermissionId"  resultClass="com.groot.module.domain.GrootSystemRolePermission" parameterClass="String">
+    	 select t.name as roleId 
+    	 from GROOT_SYSTEM_ROLE_PERMISSION rp  
+    	 left join GROOT_SYSTEM_ROLE t on rp.role_id=t.id  
+    	 where rp.permission_id=#permissionId#  
+    </select>
+    <select id="getPermissionListByUserName" resultClass="java.lang.String" parameterClass="map">
+    	select  p.permission_key  
+    	from GROOT_SYSTEM_USER  u
+		left join GROOT_SYSTEM_ROLE r on u.role_id= r.id 
+		left join GROOT_SYSTEM_ROLE_PERMISSION  rp  on rp.role_id=r.id
+		left join GROOT_SYSTEM_PERMISSION p on p.id = rp.permission_id 
+ 		where u.login_name=#loginName#
+   	 </select>
+	<!-- 查询用户信息 -->
+    <select id="getUserInfo" resultClass="com.groot.vo.UserVO" parameterClass="map">
+    	select u.id as userId,
+		    	u.login_name as userName,
+		    	u.password as userPassword,
+		    	c.cde_name as userState,
+		    	r.name as userRole 
+    	from GROOT_SYSTEM_USER u 
+    	left join GROOT_SYSTEM_ROLE r on u.role_id = r.id 
+    	left join GROOT_SYSTEM_LOOKUP_CDE c on u.status = c.cde_code 
+    	left join GROOT_SYSTEM_LOOKUP_TYPE t on c.type_id = t.id 
+    	where t.type_code = '10111001' 
+    	and u.login_name = #userName# 
+		<isNotEmpty property="status">
+   			and u.status = #status#
+   		</isNotEmpty>
+    </select>
+    <select id="selectSystemUser" resultClass="com.groot.module.domain.GrootSystemUser" parameterClass="map">
+    	select  r.name as roleId, 
+		    	u.id,
+		    	u.login_name as loginName,
+		    	u.password,
+		    	u.phone,
+		    	u.real_name as realName,
+		    	u.last_login_time as lastLoginTime,
+				u.status,
+				u.create_time as createTime,
+				u.create_user_id as createUserId,
+				u.tel,
+				u.email 
+		from GROOT_SYSTEM_USER u 
+		left join GROOT_SYSTEM_ROLE r on r.id=u.role_id 
+		where u.login_name=#loginName# 
+		and u.password=#password# 
+		and u.status='10A'
+    </select>
+   
+	<select id="getUserCount" resultClass="java.lang.Integer">
+		select count(*) from GROOT_SYSTEM_USER u
+		where 1=1
+		<isNotEmpty property="loginName">  and u.login_name like '$loginName$%'</isNotEmpty>
+   	</select>
+   
+    <select id="getUserListForPage" resultClass="com.groot.module.domain.GrootSystemUser" parameterClass="map">
+    	<include refid="SQLMAP-COMMON-SQL.page_begin" />
+		select u.id,
+				u.login_name as loginName,
+				u.role_id as roleId,
+				u.status as status,
+				u.email as email,
+				u.create_time as createTime
+		from GROOT_SYSTEM_USER u
+		where 1=1
+		<isNotEmpty property="loginName">  and u.login_name like '$loginName$%'</isNotEmpty>
+		order by u.login_name
+		<include refid="SQLMAP-COMMON-SQL.page_end" />
+		
+   </select> 
+   
+   <select id="getRoleCount" resultClass="java.lang.Integer" parameterClass="map">
+		select count(*) from GROOT_SYSTEM_ROLE r where 1=1 
+		<isNotEmpty property="name">  and r.name like '$name$%'</isNotEmpty>
+   </select>
+   
+    <select id="getRoleListForPage" resultClass="com.groot.module.domain.GrootSystemRole" parameterClass="map">
+    	<include refid="SQLMAP-COMMON-SQL.page_begin" />
+		select r.id,
+			   r.name  
+		from GROOT_SYSTEM_ROLE r
+		where 1=1
+		<isNotEmpty property="name">  and r.name like '$name$%'</isNotEmpty>
+		<include refid="SQLMAP-COMMON-SQL.page_end" />
+   </select> 
+   
+   <!-- 查询数量 -->
+    <select id="getSystemConfigCount" resultClass="java.lang.Integer" parameterClass="map">
+		select count(*) from GROOT_SYSTEM_CONFIG
+		where 1=1
+		<isNotEmpty property="name">  and  config_name like '$name$%'</isNotEmpty>
+		<isNotEmpty property="code">  and  config_code like '$code$%'</isNotEmpty>
+   </select>
+     <!-- 查询数据-->
+    <select id="getSystemConfigListForPage" resultClass="com.groot.module.domain.GrootSystemConfig" parameterClass="map">
+    	<include refid="SQLMAP-COMMON-SQL.page_begin" />
+		SELECT  u.id,
+			  u.config_name as configName,
+			  u.config_value as configValue,
+			  u.status,
+			  u.remark,
+			  u.create_time as createTime,
+			  u.update_time as updateTime,
+			  u.config_code as configCode
+		FROM GROOT_SYSTEM_CONFIG u 
+		WHERE 1 = 1 
+		<isNotEmpty property="name">  and u.config_name like '$name$%'</isNotEmpty>
+		<isNotEmpty property="code">  and u.config_code like '$code$%'</isNotEmpty>
+		<include refid="SQLMAP-COMMON-SQL.page_end" />
+   </select> 
+   
+    <!-- 查询字典类型表的数量 -->
+    <select id="getLookUpTypeCount" resultClass="java.lang.Integer" parameterClass="map">
+		select count(*) from GROOT_SYSTEM_LOOKUP_TYPE 
+		where 1=1
+		<isNotEmpty property="name">  and  type_name like '$name$%'</isNotEmpty>
+   </select>
+     <!-- 查询字典类型表的数据-->
+    <select id="getLookUpTypeListForPage" resultClass="com.groot.module.domain.GrootSystemLookupType" parameterClass="map">
+    	<include refid="SQLMAP-COMMON-SQL.page_begin" />
+		select  u.id,
+				u.type_name as typeName,
+				u.type_code as typeCode,
+				u.status
+		from GROOT_SYSTEM_LOOKUP_TYPE u
+		where 1=1
+		<isNotEmpty property="name">  and u.type_name like '$name$%'</isNotEmpty>
+		<include refid="SQLMAP-COMMON-SQL.page_end" />
+   </select> 
+   
+   	<!-- 查询字典表的数量 -->
+  	<select id="getLookUpCdeCount" resultClass="java.lang.Integer"  parameterClass="map">
+		select count(*) from GROOT_SYSTEM_LOOKUP_CDE 
+		where 1=1
+		<isNotEmpty property="dictionaryName">  and cde_name like '%$dictionaryName$%'</isNotEmpty>
+		<isNotEmpty property="dictionaryType">  and type_id = #dictionaryType#</isNotEmpty>
+   	</select>
+     <!-- 查询字典表的数据-->
+ 	<select id="getLookUpCdeList" resultClass="com.groot.module.domain.GrootSystemLookupCde" parameterClass="map">
+ 		<include refid="SQLMAP-COMMON-SQL.page_begin" />
+         select  slc.id,
+		         slc.cde_name as cdeName,
+		         slc.remarks,
+		         slc.status,
+		         slc.type_id as typeId,
+		         slc.cde_code as cdeCode,
+		         slc.integer_key as integerKey 
+         from GROOT_SYSTEM_LOOKUP_CDE slc
+         LEFT JOIN GROOT_SYSTEM_LOOKUP_TYPE slt ON slc.type_id = slt.id
+		where 1=1 
+		<isNotEmpty property="dictionaryName">  and slc.cde_name like '%$dictionaryName$%'</isNotEmpty>
+		<isNotEmpty property="dictionaryType">  and slc.type_id = #dictionaryType#</isNotEmpty>
+		<isNotEmpty property="typeCode">  and slt.type_code='$typeCode$'</isNotEmpty> 
+ 		<isNotEmpty property="cdeCode">  and slc.cde_code='$cdeCode$'</isNotEmpty> 
+		order by slc.cde_code
+		<include refid="SQLMAP-COMMON-SQL.page_end" />
+   	</select> 
+   	<!-- 查询订单的数量 -->
+  	<select id="getOrderPaymentCount" resultClass="java.lang.Integer"  parameterClass="map">
+		select count(*) 
+		from GROOT_ORDER_PAYMENT p 
+		where 1=1
+		<isNotEmpty property="orderNo"> and p.ORDER_NO = #orderNo# </isNotEmpty>
+		<isNotEmpty property="createStartTime">
+	      	and p.CREATE_TIME >= #createStartTime# 
+		</isNotEmpty>
+		<isNotEmpty property="createEndTime">
+			  <![CDATA[
+		      	and p.CREATE_TIME <= #createEndTime#
+		      	]]>
+		</isNotEmpty>
+   	</select>
+     <!-- 查询订单的数据-->
+ 	<select id="getOrderPaymentListForPage" resultClass="com.groot.vo.OrderPaymentVO" parameterClass="map">
+ 		<include refid="SQLMAP-COMMON-SQL.page_begin" />
+         select p.ID,
+				p.ORDER_NO as orderNo,
+				p.ORDER_TYPE as orderType,
+				p.CARD_NO as cardNo,
+				p.TRX_AMT as trxAmt,
+				p.MOBILE,
+				p.STATUS,
+				p.CREATE_TIME as createTime,
+				p.COMPLETE_TIME as completeTime,
+				p.NOTE
+			from GROOT_ORDER_PAYMENT p
+			where 1=1
+		<isNotEmpty property="orderNo"> and p.ORDER_NO = #orderNo# </isNotEmpty>
+		<isNotEmpty property="createStartTime">
+	      	and p.CREATE_TIME >= #createStartTime# 
+		</isNotEmpty>
+		<isNotEmpty property="createEndTime">
+			  <![CDATA[
+		      	and p.CREATE_TIME <= #createEndTime#
+		      	]]>
+		</isNotEmpty>
+		order by p.CREATE_TIME
+		<include refid="SQLMAP-COMMON-SQL.page_end" />
+   	</select> 
+   
+   <!-- 获取单据信息列表 -->
+    <select id="getBusheetCount" resultClass="java.lang.Integer" parameterClass="map">
+    	 select count(*) from GROOT_BUSHEET where 1=1 
+  		<isNotEmpty property="name">
+   			and busheet_name like '%$name$%' 
+   		</isNotEmpty>
+   		 order by id asc
+    </select>
+    <!--  获取单据信息列表 -->
+    <select id="getBusheetListForPage" resultClass="com.groot.module.domain.GrootBusheet" parameterClass="map">
+    	<include refid="SQLMAP-COMMON-SQL.page_begin" />
+			select b.id,
+					b.busheet_code as busheetCode,
+					b.busheet_name as busheetName,
+					b.csv_templet as csvTemplet,
+					b.xls_templet as xlsTemplet,
+					b.table_name tableName 
+			from GROOT_BUSHEET b 
+			where 1=1
+		<isNotEmpty property="name">  and b.busheet_name like '%$name$%' </isNotEmpty>
+			order by b.busheet_code 
+		<include refid="SQLMAP-COMMON-SQL.page_end" />
+    </select>
+   	 <!--  获取单据字表信息列表 -->
+    <select id="getBusheetWorkflowList" resultClass="com.groot.module.domain.GrootBusheetWorkflow" parameterClass="map">
+		select bw.id as id,
+				bw.workflow_name as workflowName,
+				bw.status_code as statusCode,
+				bw.status as status,
+				bw.busheet_id as busheetId 
+		from GROOT_BUSHEET_WORKFLOW bw	
+         where 1=1
+		<isNotEmpty property="name">
+   			and bw.workflow_name like '%$name$%' 
+   		</isNotEmpty>
+   		<isNotEmpty property="busheetId">
+   			and bw.busheet_id = #busheetId# 
+   		</isNotEmpty>
+    </select>
+    <!-- 获取单据权限列表 -->
+    <select id="getBusheetPermissionCount" resultClass="java.lang.Integer" parameterClass="map">
+    	 select count(*) from GROOT_BUSHEET_PERMISSION p where 1=1 
+  		<isNotEmpty property="busheetId">
+   			and p.busheet_id =#busheetId# 
+   		</isNotEmpty>
+   		<isNotEmpty property="departmentCode">
+   			and p.department_code like '$departmentCode$%' 
+   		</isNotEmpty>
+   		 order by p.id asc
+    </select>
+    <!--  获取单据权限列表 -->
+    <select id="getBusheetPermissionListForPage" resultClass="com.groot.module.domain.GrootBusheetPermission" parameterClass="map">
+    	<include refid="SQLMAP-COMMON-SQL.page_begin" />	
+			select p.id,
+					p.busheet_id as busheetId,
+					p.user_id as userId,
+					p.department_code as departmentCode  
+			from GROOT_BUSHEET_PERMISSION p where 1=1 
+		<isNotEmpty property="busheetId">
+   			and p.busheet_id =#busheetId# 
+   		</isNotEmpty>
+   		<isNotEmpty property="departmentCode">
+   			and p.department_code like '$departmentCode$%' 
+   		</isNotEmpty>
+		<include refid="SQLMAP-COMMON-SQL.page_end" />
+    </select>
+    
+    <select id="getPermissionByUserIdOrBesheetId" resultClass="com.groot.module.domain.GrootBusheetPermission" parameterClass="map">
+    	select p.department_code departmentCode 
+    	from GROOT_BUSHEET_PERMISSION p
+    	left join GROOT_BUSHEET b on b.id=p.busheet_id
+     	where p.user_id = #userId# 
+    </select>
+    <select id="getMaxBusheetCode" resultClass="String">
+    	select max(a.busheet_code) from GROOT_BUSHEET a
+    </select>
+    
+    <select id="getOrderById" resultClass="com.groot.vo.OrderPaymentVO" parameterClass="String">
+		select p.id,
+             p.trx_amt	as trxAmt,
+             p.create_time 	as createTime,
+             p.complete_time	as completeTime,
+             p.order_type 	as orderType,
+             p.order_no	as orderNo,
+             p.status 	as status,
+             p.card_no	as cardNo,
+             p.note,
+             p.MOBILE
+         from GROOT_ORDER_PAYMENT p
+		where p.id = #id#
+   </select>
+</sqlMap>

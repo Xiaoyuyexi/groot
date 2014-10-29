@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+    <defaultCache eternal="true" maxElementsInMemory="100" overflowToDisk="false" />
+    <cache name="shiro-activeSessionCache" memoryStoreEvictionPolicy="LRU" maxElementsInMemory="100" eternal="true" overflowToDisk="false" />
+    <cache name="lookupCdeService" memoryStoreEvictionPolicy="LRU" maxElementsInMemory="100" eternal="false" overflowToDisk="false" timeToIdleSeconds="300000" timeToLiveSeconds="1800000"/>
+    <cache name="issBankService" memoryStoreEvictionPolicy="LRU" maxElementsInMemory="200" eternal="false" overflowToDisk="false" timeToIdleSeconds="300000" timeToLiveSeconds="1800000"/>
+</ehcache>

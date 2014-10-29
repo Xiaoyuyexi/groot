@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"   
+       xmlns:aop="http://www.springframework.org/schema/aop"   
+       xmlns:context="http://www.springframework.org/schema/context"  
+       xmlns:mvc="http://www.springframework.org/schema/mvc"   
+       xmlns:tx="http://www.springframework.org/schema/tx"   
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"  
+       xsi:schemaLocation="http://www.springframework.org/schema/aop   
+        http://www.springframework.org/schema/aop/spring-aop-3.1.xsd   
+        http://www.springframework.org/schema/beans   
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd   
+        http://www.springframework.org/schema/context   
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd   
+        http://www.springframework.org/schema/mvc   
+        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd   
+        http://www.springframework.org/schema/tx   
+        http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/util 
+       http://www.springframework.org/schema/util/spring-util-3.1.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">  
+	
+	<context:component-scan base-package="com.groot;"/> 
+
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
+	<!-- 系统监控 -->
+	<bean id="systemMonitorAspect" class="com.groot.service.SystemMonitorAspect"/>
+	
+	<!-- 定时程序 -->
+	<task:annotation-driven scheduler="qbScheduler" mode="proxy"/>  
+    <task:scheduler id="qbScheduler" pool-size="10"/>  
+    
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+    
+  	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+		<bean class="com.groot.interceptor.SessionInterceptor"/>
+	</mvc:interceptors>
+	
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+        <property name="prefix" value="/WEB-INF/" />  
+        <property name="suffix" value=".jsp" />  
+    </bean>
+    
+    <bean id="messageSource"
+        class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="i18n/messages" />
+    </bean>
+
+	<bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    	<property name="defaultEncoding" value="utf-8"/>
+    </bean>
+    
+	<bean  class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">  
+	</bean>
+	
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+              <property name="objectMapper">
+                 <bean class="org.codehaus.jackson.map.ObjectMapper">
+                     <property name="dateFormat">
+                     <bean class="java.text.SimpleDateFormat">
+                     <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"></constructor-arg>
+                     </bean>
+                     </property>
+                     <!-- <property name="_serializationConfig">
+                     <bean class="org.codehaus.jackson.map.SerializationConfig">
+                     <constructor-arg index="0" type="org.codehaus.jackson.map.SerializationConfig" value="this"></constructor-arg>
+                     <constructor-arg index="1" type="org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion" value="NON_NULL"></constructor-arg>
+                     </bean>
+                     </property> -->
+                 </bean>
+              </property>
+        </bean>
+    </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!-- <aop:config proxy-target-class="true"/> -->
+    
+</beans>  
